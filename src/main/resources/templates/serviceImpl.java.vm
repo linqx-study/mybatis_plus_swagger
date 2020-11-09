@@ -1,0 +1,31 @@
+﻿package ${package.ServiceImpl};
+
+import com.joint.pojo.bo.PageBO;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import com.github.pagehelper.PageHelper;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} implements ${table.serviceName} {
+
+    @Resource
+    private ${table.mapperName} mapper;
+
+    @Override
+    public List<${entity}> getList(PageBO pageBO) {
+        return PageHelper.startPage(pageBO).doSelectPage(() -> mapper.selectList(null));
+    }
+}

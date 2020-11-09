@@ -1,0 +1,80 @@
+package ${package.Entity};
+
+#foreach($pkg in ${table.importPackages})
+import ${pkg};
+#end
+#if(${swagger2})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.joint.common.annotation.ExcelColumn;
+#if(${entityLombokModel})
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+#if(${chainModel})
+import lombok.experimental.Accessors;
+#end
+#end
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.joint.common.DefaultFinal;
+
+/**
+ * <p>
+ * $!{table.comment}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${entityLombokModel})
+@Data
+#if(${superEntityClass})
+@EqualsAndHashCode(callSuper = true)
+#else
+@EqualsAndHashCode(callSuper = false)
+#end
+#if(${chainModel})
+@Accessors(chain = true)
+#end
+#end
+#if(${table.convert})@TableName("${table.name}")
+#end
+#if(${swagger2})
+@ApiModel(value = "${entity}对象", description = "$!{table.comment}")
+#end
+public class ${entity} {
+
+
+## ----------  BEGIN 字段循环遍历  ----------
+#set($colNum=0)
+#foreach($field in ${table.fields})
+#set($colNum=$colNum+1)
+#if(${field.keyFlag})
+#set($keyPropertyName=${field.propertyName})
+#end
+#if("$!field.comment" != "")
+#if(${swagger2})
+#if(!${field.keyFlag})
+    @ExcelColumn(value = "${field.comment}", col = $colNum)
+    @ApiModelProperty(name = "${field.name}", value = "${field.comment}")
+#end
+#if(${field.propertyType} == "Date")
+    @JsonFormat(pattern = DefaultFinal.DATE_TIME_FORMAT, locale = DefaultFinal.TIME_LOCALE_CHINA, timezone = DefaultFinal.TIME_ZONE)
+#end
+#else
+/**
+         * ${field.comment}
+         */
+#end
+#end
+#if(${field.keyFlag})
+    @TableId(value = "${field.propertyName}")
+
+#end
+    private ${field.propertyType} ${field.propertyName};
+
+#end
+## ----------  END 字段循环遍历  ----------
+}
