@@ -63,8 +63,7 @@ public class GeneratorCommon {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        //dsc.setDbType(DbType.MYSQL);
-        dsc.setDbType(DbType.ORACLE);
+        dsc.setDbType(DbType.MYSQL);
         dsc.setTypeConvert(new MySqlTypeConvert() {
             // 自定义数据库表字段类型转换【可选】
             @Override
@@ -82,12 +81,9 @@ public class GeneratorCommon {
             }
         });
         //数据库连接配置
+//        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver"); //mysql8.0使用
 
-
-        dsc.setDriverName("oracle.jdbc.OracleDriver");
-        dsc.setUsername("ws_root");
-        dsc.setPassword("ws_root");
-        dsc.setUrl("jdbc:oracle:thin:@127.0.0.1:1521:ORCL");
         mpg.setDataSource(dsc);
 
         // 策略配置
@@ -97,8 +93,8 @@ public class GeneratorCommon {
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//采用驼峰映射
         strategy.setEntityLombokModel(true);//【实体】是否为lombok模型（默认 false）
-        //strategy.setTablePrefix("BD");
-        strategy.setInclude(new String[]{"t_test"}); // 需要生成的表.如果需要生成所有的, 注释掉此行就可以
+        strategy.setTablePrefix("t_");
+        strategy.setInclude(new String[]{"t_"}); // 需要生成的表.如果需要生成所有的, 注释掉此行就可以
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 自定义实体父类
         // strategy.setSuperEntityClass("com.baomidou.demo.TestEntity");
@@ -124,8 +120,7 @@ public class GeneratorCommon {
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.joint");// 自定义包路径
         pc.setController("controller");// 这里是控制器包名，默认 web
-        //pc.setMapper("pojo.mapper");
-        pc.setMapper("pojo.wsOracleMapper");// 设置Mapper包名，默认mapper
+        pc.setMapper("pojo.mapper");// 设置Mapper包名，默认mapper
         pc.setService("service");// 设置Service包名，默认service
         pc.setEntity("pojo.dao");// 设置Entity包名，默认entity,继承的父类  已序列化
         pc.setXml("mapper.xml");// 设置Mapper XML包名，默认mapper.xml
@@ -192,15 +187,15 @@ public class GeneratorCommon {
 
         // 自定义模板配置，可以 copy 源码 mybatis-plus/src/main/resources/templates 下面内容修改，
         // 放置自己项目的 src/main/resources/templates 目录下, 默认名称一下可以不配置，也可以自定义模板名称
-         TemplateConfig tc = new TemplateConfig();
-         tc.setController("/templates/controller.java.vm");
-         tc.setEntity("/templates/entity.java.vm");
-         tc.setMapper("/templates/mapper.java.vm");
-         tc.setXml("/templates/mapper.xml.vm");
-         tc.setService("/templates/service.java.vm");
-         tc.setServiceImpl("/templates/serviceImpl.java.vm");
+        TemplateConfig tc = new TemplateConfig();
+        tc.setController("/templates/controller.java.vm");
+        tc.setEntity("/templates/entity.java.vm");
+        tc.setMapper("/templates/mapper.java.vm");
+        tc.setXml("/templates/mapper.xml.vm");
+        tc.setService("/templates/service.java.vm");
+        tc.setServiceImpl("/templates/serviceImpl.java.vm");
 //         如上任何一个模块如果设置 空 OR Null 将不生成该模块。
-         mpg.setTemplate(tc);
+        mpg.setTemplate(tc);
         // 执行生成
         mpg.execute();
 
