@@ -7,18 +7,17 @@ import ${pkg};
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 #end
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.joint.common.annotation.ExcelColumn;
 #if(${entityLombokModel})
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-#if(${chainModel})
-import lombok.experimental.Accessors;
-#end
 #end
 
+#foreach($field in ${table.fields})
+#if(${field.propertyType} == "Date")
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.joint.common.DefaultFinal;
+#end
+#end
 
 /**
  * <p>
@@ -30,14 +29,6 @@ import com.joint.common.DefaultFinal;
  */
 #if(${entityLombokModel})
 @Data
-#if(${superEntityClass})
-@EqualsAndHashCode(callSuper = true)
-#else
-@EqualsAndHashCode(callSuper = false)
-#end
-#if(${chainModel})
-@Accessors(chain = true)
-#end
 #end
 #if(${table.convert})@TableName("${table.name}")
 #end
